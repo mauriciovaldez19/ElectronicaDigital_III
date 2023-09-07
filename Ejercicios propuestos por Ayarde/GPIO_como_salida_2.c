@@ -18,6 +18,7 @@ int main(void){
 	int k;
 	while(1){
 			for(k=0;k<10;k++){
+			LPC_GPIO2->FIOCLR |= (0xFF);
 			LPC_GPIO2->FIOSET |= numDisplay[k];
 			delay(1000);
 							}
