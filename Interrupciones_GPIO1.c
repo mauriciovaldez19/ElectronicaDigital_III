@@ -31,7 +31,7 @@ int main(void){
 }
 
 void EINT3_IRQHandler(void){
-	if(LPC_GPIOINT->IO0IntStatF & INPUT1){
+	if(LPC_GPIOINT->IO0IntStatR & INPUT1){
 		for(int i=0;i<10;i++){
 			LPC_GPIO0->FIOPIN |= OUTPUT & secuencia1[i];
 			delay();

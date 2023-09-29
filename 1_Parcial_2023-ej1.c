@@ -12,10 +12,10 @@
 void configPin(void);
 void configSystick (int k);
 void configINT(void);
-uint32_t pos =0;
+uint8_t pos =0;
 uint32_t auxEINT1=0;
 uint32_t auxEINT2=0;
-int clkDiv=100;
+uint16_t clkDiv=100;
 
 
 int main(void) {
