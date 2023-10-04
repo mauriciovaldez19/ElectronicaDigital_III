@@ -30,16 +30,12 @@ void EINT3_IRQHandler(void){
 	}
 	else if(n==15){
 		T1=T2;
-		LPC_TIM0 ->EMR	|=(1<<0);//external match0.0 comienza en high
-		LPC_TIM0 ->TCR		  =3; //pag505
-		LPC_TIM0 ->TCR		 &=~(1<<1);
+		configTimer();
 
 	}
 	else{
 		T1=T2/n;
-		LPC_TIM0 ->EMR	|=(1<<0);//external match0.0 comienza en high
-		LPC_TIM0 ->TCR		  =3; //pag505
-		LPC_TIM0 ->TCR		 &=~(1<<1);
+		configTimer();
 
 	}
 
