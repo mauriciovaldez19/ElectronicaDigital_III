@@ -45,7 +45,7 @@ void EINT3_IRQHandler(void){
 		LPC_GPIOINT->IO0IntClr |=(0xF);
 }
      else{
-    	 NVIC_DisableIRQ(EINT3_IRQn); // desabilito las interrpciones
+    	 NVIC_DisableIRQ(EINT3_IRQn); // deshabilito las interrpciones
 }}
 
 void configPin(void){
@@ -70,3 +70,70 @@ NVIC_SetPriority(EINT3_IRQn,0);
 NVIC_EnableIRQ(EINT3_IRQn);
 	return;
 }
+
+/*
+#include <LPC17xx.h>
+
+// Declaración de variables
+uint8_t numbers[10] = {0};  // Arreglo para almacenar los últimos 10 números
+uint32_t interruptPriority = 0;  // Prioridad inicial de interrupción
+uint32_t interruptCount = 0;  // Contador de interrupciones
+
+// Función para actualizar la prioridad de interrupción
+void updateInterruptPriority() {
+    interruptCount++;
+    
+    if (interruptCount % 200 == 0) {
+        if (interruptPriority < 7) {
+            interruptPriority++;
+            NVIC_SetPriority(EINT3_IRQn, interruptPriority);  // Actualizar prioridad
+        } else {
+            // Deshabilitar interrupciones por GPIO
+            NVIC_DisableIRQ(EINT3_IRQn);
+        }
+    }
+}
+
+// Función de inicialización de GPIO
+void initGPIO() {
+    LPC_GPIOINT->IO2IntEnF |= (1 << 10) | (1 << 11) | (1 << 12) | (1 << 13);  // Configurar pines P2.10 a P2.13 para detección de flanco descendente
+    NVIC_EnableIRQ(EINT3_IRQn);  // Habilitar interrupción externa
+    NVIC_SetPriority(EINT3_IRQn, interruptPriority);  // Establecer prioridad de interrupción
+}
+
+// Función de manejo de interrupción
+void EINT3_IRQHandler(void) {
+    // Leer los valores de los 4 pines de entrada GPIO
+    uint8_t inputNumber = ((LPC_GPIO2->FIOPIN >> 10) & 0x0F);
+
+    // Mover los números en el arreglo para hacer espacio para el nuevo número
+    for (int i = 9; i > 0; i--) {
+        numbers[i] = numbers[i - 1];
+    }
+
+    // Almacenar el nuevo número en el arreglo
+    numbers[0] = inputNumber;
+
+    // Actualizar la prioridad de interrupción
+    updateInterruptPriority();
+
+    // Borrar la bandera de interrupción
+    LPC_GPIOINT->IO2IntClr |= (1 << 10) | (1 << 11) | (1 << 12) | (1 << 13);
+}
+
+int main() {
+    // Inicialización del sistema
+    SystemInit();
+    
+    // Inicialización de GPIO
+    initGPIO();
+    
+    while (1) {
+        // El programa continúa ejecutándose
+        // Las interrupciones por GPIO manejarán la entrada de números
+    }
+    
+    return 0;
+}
+
+*/
