@@ -2,13 +2,14 @@
 
 void cfgPin(void);
 void cfgGPIOInt(void);
+void cfgSystick(void);
 
-uint8_t valor=0;
-uint8_t condicion=0;
+uint8_t inputVal=0;
 
 int main(void){
     cfgPin();
     cfgGPIOInt();
+    cfgSystick();
 
     while(1){};
 
@@ -28,20 +29,33 @@ void cfgGPIOInt(void){
     NVIC_EnableIRQ(EINT3_IRQn);
     return;
 }
+void cfgSystick(void){
+    SysTick -> LOAD = 9999999;
+    SysTick -> CTRL = 1 | 1<<1 | 1<<2;
+    SysTick -> VAL  = 0;
+    
+    SysTick -> CTRL &= SysTick -> CTRL;
+
+}
 void EINT3_IRQHandler(void){
-    if(SysTic_Config(10000000)){};
-    while(condicion==0){};
-    valor=((LPC_GPIO0->FIOPIN &(0xFF))|LPC_GPIO0->FIOPIN);
-    if(SysTick_Config(10000000)){};
-    while(condicion==1){};
-    valor=(valor*4);
-    if(valor>(0xFF)){
-        valor=(0xFF);
-    }
-    LPC_GPIO1->FIOPIN = valor;
+    cfgSystick();
     LPC_GPIOINT->IO0IntClr |=(1<<8);
 
 }
 void SysTick_Handler(void){
-    condicion++;
+static uint8_t condicion = 0;
+    if(condicion==0){
+        inputVal=((LPC_GPIO0->FIOPIN &(inputVal))|LPC_GPIO0->FIOPIN);
+    }
+    if(condicion==1){
+        inputVal = (inputVal*4);
+        if(inputVal>(0xFF)){
+            inputVal=(0xFF);
+            }
+    LPC_GPIO1->FIOPIN = inputVal;
+    SysTick -> CTRL &= ~(1);
+    condicion=0;
+    }
+condicion++;
+SysTick -> CTRL &= SysTick -> CTRL;
 }
