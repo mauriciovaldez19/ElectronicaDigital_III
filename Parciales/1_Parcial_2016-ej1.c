@@ -19,29 +19,46 @@ int main(void){
 
     return 0;
 }
+void SysTick_Handler(void){
+    static uint8_t status=0; //status lo uso para saber el estado del led
+    status++;
+    switch (status%2){
+        case 1:
+        LPC_GPIO0->FIOCLR |=(1<<8);
+        cfgSystick(time_off);
+        break;
+
+        case 0:
+        LPC_GPIO0->FIOSET |=(1<<8);
+        cfgSystick(time_on);
+        break;
+    }
+    SysTick->CTRL &= SysTick->CTRL;
+}
 void EINT3_IRQHandler(void){
     nInt++;
     switch(nInt%3){
         case 1:
-        uint32_t time_off  = (*ptr_off)/2;
-        uint32_t time_on   = (*ptr_on)/2;
+        time_off  = ((*ptr_off)*SystemCoreClock)/2;
+        time_on   = ((*ptr_on)*SystemCoreClock)/2;
         break;
         case 2:
-        uint32_t time_off  = (*ptr_off)/4;
-        uint32_t time_on   = (*ptr_on)/4;
+        time_off  = ((*ptr_off)*SystemCoreClock)/4;
+        time_on   = ((*ptr_on)*SystemCoreClock)/4;
         break;
         case 0:
-        uint32_t time_off  = (*ptr_off);
-        uint32_t time_on   = (*ptr_on);
+        time_off  = ((*ptr_off)*SystemCoreClock);
+        time_on   = ((*ptr_on)*SystemCoreClock);
         break;
     }
-    LPC_GPIOINT-> IO0Clr |=(1<<6);
-
+    LPC_GPIO0->FIOSET |= (1<<8); //enciendo el led
+    cfgSystick(time_on);
+    LPC_GPIOINT-> IO0IntClr |=(1<<6);// limpio el flag
 
 }
-void cfgSystick(uint32_ ticks){
+void cfgSystick(uint32_t ticks){
     SysTick->LOAD  = (ticks)-1;
-    SysTick->CRTL  = (1) | (1<<1) | (1<<2); // habilito el contador; habilito la interrupcion ; uso el clock interno
+    SysTick->CTRL  = (1) | (1<<1) | (1<<2); // habilito el contador; habilito la interrupcion ; uso el clock interno
     SysTick->VAL   = 0;
     SysTick->CTRL &= SysTick->CTRL;
     return;
