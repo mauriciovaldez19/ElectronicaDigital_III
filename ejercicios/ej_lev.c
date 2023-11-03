@@ -20,7 +20,7 @@ void SysTick_IRQHandler(
 )
 void EINT3_IRQHandler(void){
     index=0;
-    configSystick();
+    cfgSystick();
     LPC_GPIOINT->IO2IntClr |= (1<<4);
 }
 void cfgSystick(void){
