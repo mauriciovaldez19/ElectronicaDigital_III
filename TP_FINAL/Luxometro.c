@@ -124,7 +124,7 @@ ADC_Init(LPC_ADC, 200000);
 LPC_ADC->ADGDR &= ~(1<<31);
 ADC_ChannelCmd(LPC_ADC,ADC_CHANNEL_0,ENABLE);
 ADC_StartCmd (LPC_ADC, ADC_START_ON_MAT01);
-
+NVIC_EnableIRQ(ADC_IRQn);
 return;
 }
 void cfgDAC(void){
