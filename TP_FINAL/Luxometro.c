@@ -52,6 +52,14 @@ GPIO_SetDir(PINSEL_PORT_0, PIN22,1);
     while(1){}
 
     return 0;
+    
+}
+void ADC_IRQHandler (){
+	static uint16_t valorBinario=0;
+	static float voltADC =0;
+	valorBinario=ADC_ChannelGetData(LPC_ADC,ADC_CHANNEL_0);
+	voltADC= (valorBinario/4096)*3.3;
+	return;
 }
 void EINT0_IRQHandler(void){
 	static uint8_t state=0;
@@ -97,6 +105,7 @@ PINSEL_ConfigPin(&adcPin_cfg);
 ADC_Init(LPC_ADC, 200000); 
 LPC_ADC->ADGDR &= ~(1<<31);
 ADC_ChannelCmd(LPC_ADC,ADC_CHANNEL_0,ENABLE);
+ADC_StartCmd (LPC_ADC, ADC_START_ON_MAT01);
 
 return;
 }
