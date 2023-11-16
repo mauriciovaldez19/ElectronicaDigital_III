@@ -1,5 +1,5 @@
 /* Pasos propuestos para el funcionamiento del Luxometro:
- * La señal de tensión a bornes del LDR ingresa por un canal del ADC
+ * La señal de tensión a bornes del LDR ingresa por un canal del ADC (canal 0)
  * el ADC convierte los datos y los guarda en un arreglo de 20 valores; la conversion sera en modo burst pero habilitado/deshabilitado por Timer.
  * Se calcula 1 muestra cada 250[ms] es decir las 20 muestras en 5 [s].
  * Los datos son tratados por una funcion internamente para obtener un promedio de la medición.
@@ -23,14 +23,41 @@
 void cfgGPIO(void);
 void cfgDAC(void);
 void cfgADC(void);
+void cfgTIMER(void);
+void cfgEINT(void);
+
+uint16_t inputDATA[20]={0};
 
 int main(void){
     cfgGPIO();
     cfgDAC();
+    cfgADC();
+    cfgTIMER();
+    cfgEINT();
 
     while(1){}
 
     return 0;
+}
+void cfgEINT(void){
+EXTI_InitTypeDef ext_int;
+    ext_int.EXTI_Line = EXTI_EINT0;
+    ext_int.EXTI_Mode = EXTI_MODE_EDGE_SENSITIVE;
+    ext_int.EXTI_polarity = EXTI_POLARITY_LOW_ACTIVE_OR_FALLING_EDGE;
+    EXTI_Config(&ext_int);
+    EXTI_ClearEXTIFlag(EXTI_EINT0);
+/*PINSEL_CFG_Type ext_int;
+    PinCfg.Portnum = PINSEL_PORT_2;
+    PinCfg.Pinnum = PINSEL_PIN_10;
+    PinCfg.Funcnum = PINSEL_FUNC_1;
+    PinCfg.Pinmode = PINSEL_PINMODE_PULLUP;
+    PinCfg.OpenDrain = PINSEL_PINMODE_NORMAL;
+PINSEL_ConfigPin(&ext_int);  
+*/
+    return;
+}
+void cfgTIMER(void){
+    return;
 }
 void cfgADC(void){
 PINSEL_CFG_Type adcPin_cfg;
