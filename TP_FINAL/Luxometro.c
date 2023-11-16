@@ -12,6 +12,10 @@
  * La DMA se utiliza para: 
  * 							movilizar datos de ADC->Memoria
  *  */
+#define RED_LED 1<<3
+#define GREEN_LED 1<<4
+#define PIN22 1<<22
+
 #include "LPC17xx.h"
 #include "lpc17xx_adc.h"
 #include "lpc17xx_dac.h"
@@ -42,7 +46,7 @@ PINSEL_CFG_Type led_Red;
     led_Red.Pinmode = PINSEL_PINMODE_PULLUP;
     led_Red.OpenDrain = PINSEL_PINMODE_NORMAL;
 PINSEL_ConfigPin(&led_Red);
-GPIO_SetDir(PINSEL_PORT_0, PINSEL_PIN_22,1);
+GPIO_SetDir(PINSEL_PORT_0, PIN22,1);
 
 
     while(1){}
@@ -53,11 +57,12 @@ void EINT0_IRQHandler(void){
 	static uint8_t state=0;
     state++;
     if(state%2){
-        GPIO_SetValue(PINSEL_PORT_0, PINSEL_PIN_22);
+       LPC_GPIO0->FIOSET |= PIN22;
     }
     else{
-        GPIO_ClearValue(PINSEL_PORT_0, PINSEL_PIN_22);
+        LPC_GPIO0->FIOCLR |= PIN22;
     }
+    EXTI_ClearEXTIFlag(EXTI_EINT0);
 	return;
 }
 void cfgEINT(void){
@@ -114,7 +119,7 @@ PINSEL_CFG_Type led_Red;
     led_Red.Pinmode = PINSEL_PINMODE_PULLUP;
     led_Red.OpenDrain = PINSEL_PINMODE_NORMAL;
 PINSEL_ConfigPin(&led_Red);
-GPIO_SetDir(PINSEL_PORT_2, PINSEL_PIN_3,1); 
+GPIO_SetDir(PINSEL_PORT_2, RED_LED,1); 
 
 PINSEL_CFG_Type led_Green;
     led_Green.Portnum = PINSEL_PORT_2;
@@ -123,7 +128,7 @@ PINSEL_CFG_Type led_Green;
     led_Green.Pinmode = PINSEL_PINMODE_PULLUP;
     led_Green.OpenDrain = PINSEL_PINMODE_NORMAL;
 PINSEL_ConfigPin(&led_Green);
-GPIO_SetDir(PINSEL_PORT_2, PINSEL_PIN_4,1);
+GPIO_SetDir(PINSEL_PORT_2, GREEN_LED,1);
 
 return;
 }
