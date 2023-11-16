@@ -34,27 +34,30 @@ int main(void){
 }
 void cfgADC(void){
 PINSEL_CFG_Type adcPin_cfg;
-	adcPin_cfg.Portnum   = 0;
-	adcPin_cfg.Pinnum    = 23;
-	adcPin_cfg.Funcnum   = 1;
+	adcPin_cfg.Portnum   = PINSEL_PORT_0;
+	adcPin_cfg.Pinnum    = PINSEL_PIN_23;
+	adcPin_cfg.Funcnum   = PINSEL_FUNC_1;
 	adcPin_cfg.Pinmode 	 = PINSEL_PINMODE_TRISTATE;
-	adcPin_cfg.OpenDrain = 0;
+	adcPin_cfg.OpenDrain = PINSEL_PINMODE_NORMAL;
 PINSEL_ConfigPin(&adcPin_cfg);
     
+ADC_Init(LPC_ADC, 200000); 
+LPC_ADC->ADGDR &= ~(1<<31);
+ADC_ChannelCmd(LPC_ADC,ADC_CHANNEL_0,ENABLE);
+
 return
 }
 void cfgDAC(void){
 PINSEL_CFG_Type dacPin_cfg;
-    dacPin_cfg.Portnum = 0;
-    dacPin_cfg.Pinnum = 26;
-    dacPin_cfg.Funcnum = 2;
-    dacPin_cfg.Pinmode = 0;
-    dacPin_cfg.OpenDrain = 0;
+    dacPin_cfg.Portnum = PINSEL_PORT_0;
+    dacPin_cfg.Pinnum = PINSEL_PIN_26;
+    dacPin_cfg.Funcnum = PINSEL_FUNC_2;
+    dacPin_cfg.Pinmode = PINSEL_PINMODE_PULLUP;
+    dacPin_cfg.OpenDrain = PINSEL_PINMODE_NORMAL;
 PINSEL_ConfigPin(&dacPin_cfg);
 DAC_Init(LPC_DAC);
 return;
 }
-
 void cfgGPIO(void){
 PINSEL_CFG_Type led_Red;
     PinCfg.Portnum = PINSEL_PORT_2;
