@@ -91,6 +91,24 @@ EXTI_InitTypeDef ext_int;
     return;
 }
 void cfgTIMER(void){
+    // prescaler
+	TIM_TIMERCFG_Type timCfg;
+	timCfg.PrescaleOption=TIM_PRESCALE_TICKVAL;
+	timCfg.PrescaleValue=1;
+	//parametreos match
+	TIM_MATCHCFG_Type matchCfg;
+	matchCfg.MatchChannel=1; //match0.1 p/ ADC
+	matchCfg.IntOnMatch= ENABLE; //que interrumpa
+	matchCfg.StopOnMatch=DISABLE;// no se detenga
+	matchCfg.ResetOnMatch=ENABLE;
+	matchCfg.ExtMatchOutputType=TIM_EXTMATCH_NOTHING;//no haga nada por el pin del match
+	matchCfg.MatchValue=6249999;// tiempo para 250ms
+
+	TIM_Init(LPC_TIM0,TIM_TIMER_MODE,(void*)&timCfg);
+	TIM_ConfigMatch(LPC_TIM0,&matchCfg);
+	TIM_Cmd(LPC_TIM0,ENABLE);
+	//NVIC_EnableIRQ(TIMER0_IRQn);
+    
     return;
 }
 void cfgADC(void){
