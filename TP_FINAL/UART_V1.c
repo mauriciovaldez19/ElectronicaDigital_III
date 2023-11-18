@@ -5,9 +5,9 @@
 
 uint8_t msg_1[]= "Luxómetro\t-\tTrabajo Final Electrónica Digital 3\t-\t 2023\n\r";
 uint8_t msg_2[]= "Ingrese la cantidad de lúmenes a comparar\n\r";
-uint8_t msg_4[]= "Opción 1->100 Lúmenes\t-\tOpción 2->200 Lúmenes\t-\tOpción 3->300 Lúmenes\n\r";
-uint8_t msg_5[]= "Opción 4->400 Lúmenes\t-\tOpción 5->500 Lúmenes\t-\tOpción 6->600 Lúmenes\n\r";
-uint8_t msg_3[]= "La opción elegida es: \n\r";
+uint8_t msg_3[]= "Opción 1->100 Lúmenes\t-\tOpción 2->200 Lúmenes\t-\tOpción 3->300 Lúmenes\n\r";
+uint8_t msg_4[]= "Opción 4->400 Lúmenes\t-\tOpción 5->500 Lúmenes\t-\tOpción 6->600 Lúmenes\n\r";
+uint8_t msg_5[]= "La opción elegida es: \n\r";
 uint8_t error[]= "\n Ingrese un valor válido \n\r";
 
 uint8_t info[1]="";// variable para guardar valores recibidos
@@ -23,8 +23,8 @@ int main(void)
     cfgUART();
     UART_Send(LPC_UART2,msg_1,sizeof(msg_1),BLOCKING);
     UART_Send(LPC_UART2,msg_2,sizeof(msg_2),BLOCKING);
+    UART_Send(LPC_UART2,msg_3,sizeof(msg_3),BLOCKING);
     UART_Send(LPC_UART2,msg_4,sizeof(msg_4),BLOCKING);
-    UART_Send(LPC_UART2,msg_5,sizeof(msg_5),BLOCKING);
     while(1)
     {
 
@@ -76,7 +76,7 @@ void UART2_IRQHandler(void){
         }
     }
 	if(status){
-		UART_Send(LPC_UART2,msg_3,sizeof(msg_3),BLOCKING);
+		UART_Send(LPC_UART2,msg_3,sizeof(msg_5),BLOCKING);
 		UART_Send(LPC_UART2,mensaje,sizeof(mensaje),BLOCKING);
 	}
 	uint32_t aux = atoi((char*)mensaje);
