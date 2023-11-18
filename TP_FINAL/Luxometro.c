@@ -13,21 +13,6 @@
  * 							movilizar datos de ADC->Memoria
  * LPC_GPDMA->DMACSync &= ~(1 << 4); //linea para subsanar error entre ADC y DMA
  *  */
-/* Pasos propuestos para el funcionamiento del Luxometro:
- * La señal de tensión a bornes del LDR ingresa por un canal del ADC (canal 0)
- * el ADC convierte los datos y los guarda en un arreglo de 20 valores; la conversion sera en modo burst pero habilitado/deshabilitado por Timer.
- * Se calcula 1 muestra cada 250[ms] es decir las 20 muestras en 5 [s].
- * Los datos son tratados por una funcion internamente para obtener un promedio de la medición.
- * Antes de comenzar y una vez finalizada la toma de datos, se envía por el DAC un arreglo de valores que represente
- * una señal sonora  reproducida por un buzzer.
- * Luego de obtenidos y tratados los datos, se envía el resultado mediante UART a la pc. Además se hará la valoración de que si el valor medido es menor
- * al valor reglamentario se prende un led(rojo) por GPIO, si el resultado es igual o mayor al permitido se prende otro led (verde).
- * La configuración del valor de referencia se envía desde la pc por UART
- *
- * La DMA se utiliza para:
- * 							movilizar datos de ADC->Memoria
- * LPC_GPDMA->DMACSync &= ~(1 << 4); //linea para subsanar error entre ADC y DMA
- *  */
 
 
 #include "LPC17xx.h"
@@ -66,11 +51,9 @@ int main (void)
 
     while(1)
 	{
-
 	}
 
     return 0;
-
 }
 
 //Configuración iinterrupción externa EINT0
