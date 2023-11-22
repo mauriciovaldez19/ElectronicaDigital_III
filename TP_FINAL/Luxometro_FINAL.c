@@ -43,9 +43,9 @@ uint8_t msg_2[]= "Ingrese la cantidad de lúmenes a comparar\n\r";
 uint8_t msg_3[]= "Opción 1->100 Lúmenes\n\r";
 uint8_t msg_4[]= "Opción 2->200 Lúmenes\n\r";
 uint8_t msg_5[]= "Opción 3->300 Lúmenes\n\r";
-uint8_t msg_6[]= "Opción 4->500 Lúmenes\n\r";
-uint8_t msg_7[]= "Opción 5->800 Lúmenes\n\r";
-uint8_t msg_8[]= "Opción 6->1000 Lúmenes\n\r";
+uint8_t msg_6[]= "Opción 4->1000 Lúmenes\n\r";
+uint8_t msg_7[]= "Opción 5->1500 Lúmenes\n\r";
+uint8_t msg_8[]= "Opción 6->2500 Lúmenes\n\r";
 
 uint8_t msg_i[]= "La opción elegida es:   \n\r";
 uint8_t error[]= "Ingrese un valor válido \n\r";
@@ -359,24 +359,44 @@ void UART2_IRQHandler(void)
 	switch(aux){
 	        case 1:
 	        referencia = 100;
+	        NVIC_EnableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
+
 	        break;
 	        case 2:
 	        referencia = 200;
+	        NVIC_EnableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
+
 	        break;
 	        case 3:
 	        referencia = 300;
+	        NVIC_EnableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
+
 	        break;
 	        case 4:
-	        referencia = 500;
+	        referencia = 1000;
+	        NVIC_EnableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
+
 	        break;
 	        case 5:
-	        referencia = 800;
+	        referencia = 1500;
+	        NVIC_EnableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
+
 	        break;
 	        case 6:
-	        referencia = 1000;
+	        referencia = 2500;
+	        NVIC_EnableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
+
 	        break;
 	        default:
 	        UART_Send(LPC_UART2,error,sizeof(error),BLOCKING);
+	        NVIC_DisableIRQ	  (EINT0_IRQn);
+	        NVIC_ClearPendingIRQ(EINT0_IRQn);
 	}
 
 	//Se convierte la referencia a volts
@@ -384,7 +404,7 @@ void UART2_IRQHandler(void)
 	parametro = parametro/1000;
 
 	//Se habilita la interrupción externa
-	NVIC_EnableIRQ	  (EINT0_IRQn);
+//	NVIC_EnableIRQ	  (EINT0_IRQn);
 
 	return;
 }
