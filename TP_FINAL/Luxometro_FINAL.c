@@ -50,7 +50,7 @@ uint8_t msg_8[]= "Opción 6->2500 Lúmenes\n\r";
 uint8_t msg_i[]= "La opción elegida es:   \n\r";
 uint8_t error[]= "Ingrese un valor válido \n\r";
 
-uint8_t info[1]    = "";					//Variable para guardar valores recibidos
+uint8_t info[1]    = "";		//Variable para guardar valores recibidos
 uint8_t mensaje[1] = "";
 
 uint16_t referencia = 0;			//Valor ingrasado por UART en bits
@@ -200,7 +200,7 @@ void cfgTIMER1(void)
 	matchCfg.StopOnMatch		= DISABLE;				//TIM1 no se detiene al hacer match
 	matchCfg.ResetOnMatch	    = ENABLE;				//TIM1 se resetea al hacer match
 	matchCfg.ExtMatchOutputType = TIM_EXTMATCH_NOTHING;
-	matchCfg.MatchValue			= 7499999;			    //Tiempo para 1 seg
+	matchCfg.MatchValue			= 7499999;			    //Tiempo para 300 mseg
 
 	TIM_Init	   (LPC_TIM1,TIM_TIMER_MODE,&tim1Cfg);
 	TIM_ConfigMatch(LPC_TIM1,&matchCfg);
