@@ -1,18 +1,15 @@
 /* Pasos propuestos para el funcionamiento del Luxometro:
  * La señal de tensión a bornes del LDR ingresa por un canal del ADC (canal 0)
- * el ADC convierte los datos y los guarda en un arreglo de 20 valores; la conversion sera en modo burst pero habilitado/deshabilitado por Timer.
- * Se calcula 1 muestra cada 250[ms] es decir las 20 muestras en 5 [s].
+ * El ADC convierte los datos y los guarda en un arreglo de 50 valores; la conversion sera en modo burst y los datos transferidos por DMA.
+ * Para que sean guardados los datos, se dispara una interrupcion externa, seguida del TMR0 con un valor en el MR tal que haga Match a los 5[se.
  * Los datos son tratados por una funcion internamente para obtener un promedio de la medición.
- * Antes de comenzar y una vez finalizada la toma de datos, se envía por el DAC un arreglo de valores que represente
+ * Antes de comenzar y una vez finalizada la toma de datos, se envía por el DAC un arreglo de 2 valores que represente
  * una señal sonora  reproducida por un buzzer.
- * Luego de obtenidos y tratados los datos, se envía el resultado mediante UART a la pc. Además se hará la valoración de que si el valor medido es menor
- * al valor reglamentario se prende un led(rojo) por GPIO, si el resultado es igual o mayor al permitido se prende otro led (verde).
- * La configuración del valor de referencia se envía desde la pc por UART
- *
- * La DMA se utiliza para:
- * 							movilizar datos de ADC->Memoria
- * LPC_GPDMA->DMACSync &= ~(1 << 4); //linea para subsanar error entre ADC y DMA
- *  */
+ * Luego de obtenidos y tratados los datos, se indica el resultado mediante 2 leds conectados por GPIO. Si el valor medido es menor
+ * al valor reglamentario se prende un led(rojo), si el resultado es igual o mayor al permitido se prende otro led (verde).
+ * La conexion UART entre la placa y la PC, es para seleccionar un valor de referencia, prefijado y guardado en la placa, que se 
+ * muestra en pantalla con formato de menu de opciones para hacer la comparación de la cantidad de lúmenes del ambiente.   
+ */
 
 #include "LPC17xx.h"
 #include "lpc17xx_adc.h"
